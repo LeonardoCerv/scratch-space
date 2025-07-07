@@ -1,7 +1,7 @@
 {
   "name": "scratch-space",
-  "displayName": "scratch space",
-  "description": "",
+  "displayName": "Scratch Space",
+  "description": "Lightweight, temporary tabs for quick code experiments and notes",
   "version": "0.0.1",
   "engines": {
     "vscode": "^1.101.0"
@@ -9,15 +9,147 @@
   "categories": [
     "Other"
   ],
-  "activationEvents": [],
+  "activationEvents": [
+    "onStartupFinished"
+  ],
   "main": "./out/extension.js",
   "contributes": {
     "commands": [
       {
-        "command": "scratch-space.helloWorld",
-        "title": "Hello World"
+        "command": "scratch-space.newScratchpad",
+        "title": "New Scratchpad",
+        "icon": "$(add)"
+      },
+      {
+        "command": "scratch-space.openScratchpad",
+        "title": "Open Scratchpad"
+      },
+      {
+        "command": "scratch-space.deleteScratchpad",
+        "title": "Delete Scratchpad",
+        "icon": "$(trash)"
+      },
+      {
+        "command": "scratch-space.renameScratchpad",
+        "title": "Rename Scratchpad",
+        "icon": "$(edit)"
+      },
+      {
+        "command": "scratch-space.duplicateScratchpad",
+        "title": "Duplicate Scratchpad",
+        "icon": "$(copy)"
+      },
+      {
+        "command": "scratch-space.clearAllScratchpads",
+        "title": "Clear All Scratchpads"
+      },
+      {
+        "command": "scratch-space.refresh",
+        "title": "Refresh",
+        "icon": "$(refresh)"
       }
-    ]
+    ],
+    "views": {
+      "explorer": [
+        {
+          "id": "scratchpadExplorer",
+          "name": "Scratchpads",
+          "when": "true",
+          "icon": "$(note)"
+        }
+      ]
+    },
+    "menus": {
+      "view/title": [
+        {
+          "command": "scratch-space.newScratchpad",
+          "when": "view == scratchpadExplorer",
+          "group": "navigation@1"
+        },
+        {
+          "command": "scratch-space.refresh",
+          "when": "view == scratchpadExplorer",
+          "group": "navigation@2"
+        },
+        {
+          "command": "scratch-space.clearAllScratchpads",
+          "when": "view == scratchpadExplorer",
+          "group": "1_clearAll"
+        }
+      ],
+      "view/item/context": [
+        {
+          "command": "scratch-space.openScratchpad",
+          "when": "view == scratchpadExplorer && viewItem == scratchpad",
+          "group": "inline@1"
+        },
+        {
+          "command": "scratch-space.renameScratchpad",
+          "when": "view == scratchpadExplorer && viewItem == scratchpad",
+          "group": "inline@2"
+        },
+        {
+          "command": "scratch-space.duplicateScratchpad",
+          "when": "view == scratchpadExplorer && viewItem == scratchpad",
+          "group": "inline@3"
+        },
+        {
+          "command": "scratch-space.deleteScratchpad",
+          "when": "view == scratchpadExplorer && viewItem == scratchpad",
+          "group": "inline@4"
+        }
+      ],
+      "commandPalette": [
+        {
+          "command": "scratch-space.newScratchpad",
+          "title": "Scratch Space: New Scratchpad"
+        },
+        {
+          "command": "scratch-space.clearAllScratchpads",
+          "title": "Scratch Space: Clear All Scratchpads"
+        },
+        {
+          "command": "scratch-space.openScratchpad",
+          "when": "false"
+        },
+        {
+          "command": "scratch-space.deleteScratchpad",
+          "when": "false"
+        },
+        {
+          "command": "scratch-space.renameScratchpad",
+          "when": "false"
+        },
+        {
+          "command": "scratch-space.duplicateScratchpad",
+          "when": "false"
+        },
+        {
+          "command": "scratch-space.refresh",
+          "when": "false"
+        }
+      ]
+    },
+    "configuration": {
+      "title": "Scratch Space",
+      "properties": {
+        "scratchSpace.autoSave": {
+          "type": "boolean",
+          "default": true,
+          "description": "Automatically save scratchpad content"
+        },
+        "scratchSpace.autoSaveDelay": {
+          "type": "number",
+          "default": 1000,
+          "description": "Delay in milliseconds before auto-saving"
+        },
+        "scratchSpace.defaultLanguage": {
+          "type": "string",
+          "default": "plaintext",
+          "description": "Default language for new scratchpads"
+        }
+      }
+    }
   },
   "scripts": {
     "vscode:prepublish": "npm run compile",
