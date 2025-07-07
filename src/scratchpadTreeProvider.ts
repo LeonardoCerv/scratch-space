@@ -46,7 +46,7 @@ export class ScratchpadItem extends vscode.TreeItem {
     this.command = {
       command: 'scratch-space.openScratchpad',
       title: 'Open Scratchpad',
-      arguments: [scratchpad.id]
+      arguments: [this]
     };
   }
 

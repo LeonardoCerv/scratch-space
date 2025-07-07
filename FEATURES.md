@@ -47,11 +47,31 @@
 ### New Commands Added
 - `Scratch Space: New Scratchpad from Template` - Create from pre-built templates
 - `Scratch Space: Browse Templates` - Browse template library by category
+- `Scratch Space: Convert File to Scratchpad` - Convert any file to scratchpad
+- `Scratch Space: Convert Scratchpad to File` - Convert scratchpad to project file
+- `Scratch Space: Import from Clipboard` - Import clipboard content
+- `Scratch Space: Quick Open` - Fuzzy search and open scratchpads
+- `Scratch Space: Switch Scratchpad` - Switch between open scratchpads
+- `Scratch Space: Command Palette` - All-in-one command access
 - `Change Language` - Context menu option for language switching
 
 ### Enhanced Existing Commands
 - `New Scratchpad` - Now includes language selection
-- Tree view context menu - Added language change option
+- Tree view context menu - Added language change and file conversion options
+
+### 3. **Simple File Conversion**
+- **Right-Click File Conversion**: Convert any project file to scratchpad
+- **Right-Click Scratchpad Conversion**: Convert scratchpad back to project file
+- **Smart Language Detection**: Automatic language detection from file extensions
+- **Clean Output**: Files contain only content, no metadata clutter
+- **Clipboard Import**: Import code from clipboard with language detection
+
+### 4. **Enhanced Navigation & Search**
+- **Quick Open**: Fuzzy search through all scratchpads
+- **Smart Switching**: Switch between open scratchpads
+- **Command Palette**: All-in-one command access
+- **Content Search**: Search inside scratchpad content
+- **Recent Access**: Quick access to recently used scratchpads
 
 ## ⚙️ New Configuration Options
 

@@ -62,6 +62,41 @@
         "command": "scratch-space.showTemplates",
         "title": "Browse Templates",
         "icon": "$(library)"
+      },
+      {
+        "command": "scratch-space.convertFileToScratchpad",
+        "title": "Convert to Scratchpad",
+        "icon": "$(note)"
+      },
+      {
+        "command": "scratch-space.convertScratchpadToFile",
+        "title": "Convert to File",
+        "icon": "$(file)"
+      },
+      {
+        "command": "scratch-space.quickOpen",
+        "title": "Quick Open Scratchpad",
+        "icon": "$(search)"
+      },
+      {
+        "command": "scratch-space.switchScratchpad",
+        "title": "Switch Scratchpad",
+        "icon": "$(arrow-swap)"
+      },
+      {
+        "command": "scratch-space.scratchpadPalette",
+        "title": "Command Palette",
+        "icon": "$(symbol-keyword)"
+      },
+      {
+        "command": "scratch-space.searchScratchpads",
+        "title": "Search Scratchpads",
+        "icon": "$(search)"
+      },
+      {
+        "command": "scratch-space.importFromClipboard",
+        "title": "Import from Clipboard",
+        "icon": "$(clippy)"
       }
     ],
     "views": {
@@ -92,9 +127,14 @@
           "group": "navigation@3"
         },
         {
-          "command": "scratch-space.refresh",
+          "command": "scratch-space.importFromClipboard",
           "when": "view == scratchpadExplorer",
           "group": "navigation@4"
+        },
+        {
+          "command": "scratch-space.refresh",
+          "when": "view == scratchpadExplorer",
+          "group": "navigation@5"
         },
         {
           "command": "scratch-space.clearAllScratchpads",
@@ -127,6 +167,18 @@
           "command": "scratch-space.deleteScratchpad",
           "when": "view == scratchpadExplorer && viewItem == scratchpad",
           "group": "inline@5"
+        },
+        {
+          "command": "scratch-space.convertScratchpadToFile",
+          "when": "view == scratchpadExplorer && viewItem == scratchpad",
+          "group": "export@1"
+        }
+      ],
+      "explorer/context": [
+        {
+          "command": "scratch-space.convertFileToScratchpad",
+          "when": "!explorerResourceIsFolder",
+          "group": "navigation@1"
         }
       ],
       "commandPalette": [
@@ -141,6 +193,34 @@
         {
           "command": "scratch-space.showTemplates",
           "title": "Scratch Space: Browse Templates"
+        },
+        {
+          "command": "scratch-space.convertFileToScratchpad",
+          "title": "Scratch Space: Convert File to Scratchpad"
+        },
+        {
+          "command": "scratch-space.convertScratchpadToFile",
+          "title": "Scratch Space: Convert Scratchpad to File"
+        },
+        {
+          "command": "scratch-space.quickOpen",
+          "title": "Scratch Space: Quick Open"
+        },
+        {
+          "command": "scratch-space.switchScratchpad",
+          "title": "Scratch Space: Switch Scratchpad"
+        },
+        {
+          "command": "scratch-space.scratchpadPalette",
+          "title": "Scratch Space: Command Palette"
+        },
+        {
+          "command": "scratch-space.searchScratchpads",
+          "title": "Scratch Space: Search Scratchpads"
+        },
+        {
+          "command": "scratch-space.importFromClipboard",
+          "title": "Scratch Space: Import from Clipboard"
         },
         {
           "command": "scratch-space.clearAllScratchpads",
@@ -209,7 +289,46 @@
           "description": "Show language badge in tree view"
         }
       }
-    }
+    },
+    "keybindings": [
+      {
+        "command": "scratch-space.newScratchpad",
+        "key": "ctrl+alt+n",
+        "mac": "cmd+alt+n"
+      },
+      {
+        "command": "scratch-space.newScratchpadWithTemplate",
+        "key": "ctrl+alt+t",
+        "mac": "cmd+alt+t"
+      },
+      {
+        "command": "scratch-space.quickOpen",
+        "key": "ctrl+alt+o",
+        "mac": "cmd+alt+o"
+      },
+      {
+        "command": "scratch-space.switchScratchpad",
+        "key": "ctrl+alt+s",
+        "mac": "cmd+alt+s"
+      },
+      {
+        "command": "scratch-space.convertScratchpadToFile",
+        "key": "ctrl+alt+e",
+        "mac": "cmd+alt+e",
+        "when": "editorTextFocus && resourceScheme == scratchpad"
+      },
+      {
+        "command": "scratch-space.convertFileToScratchpad",
+        "key": "ctrl+alt+i",
+        "mac": "cmd+alt+i",
+        "when": "editorTextFocus && resourceScheme == file"
+      },
+      {
+        "command": "scratch-space.scratchpadPalette",
+        "key": "ctrl+alt+p",
+        "mac": "cmd+alt+p"
+      }
+    ]
   },
   "scripts": {
     "vscode:prepublish": "npm run compile",
