@@ -64,13 +64,25 @@ Updated: ${updated}`;
   }
 
   private createDescription(): string {
+    const config = vscode.workspace.getConfiguration('scratchSpace');
+    const showLanguage = config.get<boolean>('showLanguageInTreeView');
+    
     const lines = this.scratchpad.content.split('\n').length;
+    let description = '';
+    
     if (lines > 1) {
-      return `${lines} lines`;
+      description = `${lines} lines`;
     } else if (this.scratchpad.content.length > 0) {
-      return `${this.scratchpad.content.length} chars`;
+      description = `${this.scratchpad.content.length} chars`;
+    } else {
+      description = 'empty';
     }
-    return 'empty';
+    
+    if (showLanguage && this.scratchpad.language && this.scratchpad.language !== 'plaintext') {
+      description += ` • ${this.scratchpad.language}`;
+    }
+    
+    return description;
   }
 
   private getIcon(): vscode.ThemeIcon {

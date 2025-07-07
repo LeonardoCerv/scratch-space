@@ -194,6 +194,19 @@ export class ScratchpadManager {
     this.onDidChangeScratchpads.fire();
   }
 
+  public async changeLanguage(id: string, newLanguage: string): Promise<void> {
+    const scratchpad = this.scratchpads.get(id);
+    if (!scratchpad) {
+      throw new Error(`Scratchpad with id ${id} not found`);
+    }
+
+    scratchpad.language = newLanguage;
+    scratchpad.updatedAt = new Date();
+    
+    await this.saveScratchpad(scratchpad);
+    this.onDidChangeScratchpads.fire();
+  }
+
   public async clearAllScratchpads(): Promise<void> {
     // Clear all timeouts
     this.autoSaveTimeouts.forEach(timeout => clearTimeout(timeout));

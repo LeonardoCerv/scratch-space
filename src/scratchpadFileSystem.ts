@@ -81,9 +81,48 @@ export class ScratchpadFileSystemProvider implements vscode.FileSystemProvider {
     return pathParts[1];
   }
 
-  public static createUri(id: string, name: string): vscode.Uri {
-    // Create a scratchpad URI with a clean filename
+  public static createUri(id: string, name: string, language?: string): vscode.Uri {
+    // Create a scratchpad URI with a clean filename and appropriate extension
     const cleanName = name.replace(/[^a-zA-Z0-9\-_\s]/g, '').trim() || 'scratchpad';
-    return vscode.Uri.parse(`scratchpad:///${id}/${cleanName}.txt`);
+    const extension = language ? ScratchpadFileSystemProvider.getFileExtension(language) : 'txt';
+    return vscode.Uri.parse(`scratchpad:///${id}/${cleanName}.${extension}`);
+  }
+
+  private static getFileExtension(language: string): string {
+    const extensions: { [key: string]: string } = {
+      'javascript': 'js',
+      'typescript': 'ts',
+      'python': 'py',
+      'html': 'html',
+      'css': 'css',
+      'scss': 'scss',
+      'sass': 'sass',
+      'json': 'json',
+      'markdown': 'md',
+      'xml': 'xml',
+      'yaml': 'yml',
+      'sql': 'sql',
+      'shell': 'sh',
+      'powershell': 'ps1',
+      'bat': 'bat',
+      'java': 'java',
+      'csharp': 'cs',
+      'cpp': 'cpp',
+      'c': 'c',
+      'php': 'php',
+      'ruby': 'rb',
+      'go': 'go',
+      'rust': 'rs',
+      'swift': 'swift',
+      'kotlin': 'kt',
+      'dart': 'dart',
+      'perl': 'pl',
+      'lua': 'lua',
+      'r': 'r',
+      'matlab': 'm',
+      'julia': 'jl',
+      'scala': 'scala'
+    };
+    return extensions[language] || 'txt';
   }
 }

@@ -21,8 +21,18 @@
         "icon": "$(add)"
       },
       {
+        "command": "scratch-space.newScratchpadWithTemplate",
+        "title": "New Scratchpad from Template",
+        "icon": "$(file-add)"
+      },
+      {
         "command": "scratch-space.openScratchpad",
         "title": "Open Scratchpad"
+      },
+      {
+        "command": "scratch-space.changeLanguage",
+        "title": "Change Language",
+        "icon": "$(symbol-keyword)"
       },
       {
         "command": "scratch-space.deleteScratchpad",
@@ -47,6 +57,11 @@
         "command": "scratch-space.refresh",
         "title": "Refresh",
         "icon": "$(refresh)"
+      },
+      {
+        "command": "scratch-space.showTemplates",
+        "title": "Browse Templates",
+        "icon": "$(library)"
       }
     ],
     "views": {
@@ -67,9 +82,19 @@
           "group": "navigation@1"
         },
         {
-          "command": "scratch-space.refresh",
+          "command": "scratch-space.newScratchpadWithTemplate",
           "when": "view == scratchpadExplorer",
           "group": "navigation@2"
+        },
+        {
+          "command": "scratch-space.showTemplates",
+          "when": "view == scratchpadExplorer",
+          "group": "navigation@3"
+        },
+        {
+          "command": "scratch-space.refresh",
+          "when": "view == scratchpadExplorer",
+          "group": "navigation@4"
         },
         {
           "command": "scratch-space.clearAllScratchpads",
@@ -84,25 +109,38 @@
           "group": "inline@1"
         },
         {
-          "command": "scratch-space.renameScratchpad",
+          "command": "scratch-space.changeLanguage",
           "when": "view == scratchpadExplorer && viewItem == scratchpad",
           "group": "inline@2"
         },
         {
-          "command": "scratch-space.duplicateScratchpad",
+          "command": "scratch-space.renameScratchpad",
           "when": "view == scratchpadExplorer && viewItem == scratchpad",
           "group": "inline@3"
         },
         {
-          "command": "scratch-space.deleteScratchpad",
+          "command": "scratch-space.duplicateScratchpad",
           "when": "view == scratchpadExplorer && viewItem == scratchpad",
           "group": "inline@4"
+        },
+        {
+          "command": "scratch-space.deleteScratchpad",
+          "when": "view == scratchpadExplorer && viewItem == scratchpad",
+          "group": "inline@5"
         }
       ],
       "commandPalette": [
         {
           "command": "scratch-space.newScratchpad",
           "title": "Scratch Space: New Scratchpad"
+        },
+        {
+          "command": "scratch-space.newScratchpadWithTemplate",
+          "title": "Scratch Space: New Scratchpad from Template"
+        },
+        {
+          "command": "scratch-space.showTemplates",
+          "title": "Scratch Space: Browse Templates"
         },
         {
           "command": "scratch-space.clearAllScratchpads",
@@ -122,6 +160,10 @@
         },
         {
           "command": "scratch-space.duplicateScratchpad",
+          "when": "false"
+        },
+        {
+          "command": "scratch-space.changeLanguage",
           "when": "false"
         },
         {
@@ -147,6 +189,24 @@
           "type": "string",
           "default": "plaintext",
           "description": "Default language for new scratchpads"
+        },
+        "scratchSpace.showTemplatePreview": {
+          "type": "boolean",
+          "default": true,
+          "description": "Show template preview when selecting templates"
+        },
+        "scratchSpace.favoriteTemplates": {
+          "type": "array",
+          "default": [],
+          "description": "List of favorite template IDs",
+          "items": {
+            "type": "string"
+          }
+        },
+        "scratchSpace.showLanguageInTreeView": {
+          "type": "boolean",
+          "default": true,
+          "description": "Show language badge in tree view"
         }
       }
     }

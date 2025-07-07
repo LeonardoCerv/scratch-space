@@ -4,10 +4,12 @@ import * as vscode from 'vscode';
 import { ScratchpadManager } from './scratchpadManager';
 import { ScratchpadTreeProvider } from './scratchpadTreeProvider';
 import { ScratchpadEditor } from './scratchpadEditor';
+import { TemplateManager } from './templateManager';
 
 let scratchpadManager: ScratchpadManager;
 let scratchpadEditor: ScratchpadEditor;
 let treeDataProvider: ScratchpadTreeProvider;
+let templateManager: TemplateManager;
 
 // This method is called when your extension is activated
 // Your extension is activated the very first time the command is executed
@@ -18,6 +20,7 @@ export function activate(context: vscode.ExtensionContext) {
 	scratchpadManager = new ScratchpadManager(context);
 	scratchpadEditor = new ScratchpadEditor(scratchpadManager);
 	treeDataProvider = new ScratchpadTreeProvider(scratchpadManager);
+	templateManager = new TemplateManager();
 
 	// Register the tree view
 	const treeView = vscode.window.createTreeView('scratchpadExplorer', {
@@ -47,11 +50,113 @@ export function activate(context: vscode.ExtensionContext) {
 			}
 		}),
 
+		vscode.commands.registerCommand('scratch-space.newScratchpadWithTemplate', async () => {
+			try {
+				// Show template selection
+				const templates = templateManager.getAllTemplates();
+				const templateItems = templates.map(template => ({
+					label: template.name,
+					description: template.language,
+					detail: template.description,
+					template: template
+				}));
+
+				const config = vscode.workspace.getConfiguration('scratchSpace');
+				const showPreview = config.get<boolean>('showTemplatePreview');
+
+				const selectedTemplate = await vscode.window.showQuickPick(templateItems, {
+					placeHolder: 'Select a template for the new scratchpad',
+					matchOnDescription: true,
+					matchOnDetail: true
+				});
+
+				if (selectedTemplate) {
+					const template = selectedTemplate.template;
+					const scratchpad = await scratchpadManager.createScratchpad(
+						`${template.name} Scratchpad`,
+						template.language
+					);
+					
+					// Update with template content
+					await scratchpadManager.updateScratchpad(scratchpad.id, {
+						content: template.content
+					});
+					
+					await scratchpadEditor.openScratchpad(scratchpad.id);
+				}
+			} catch (error) {
+				vscode.window.showErrorMessage(`Failed to create scratchpad from template: ${error}`);
+			}
+		}),
+
+		vscode.commands.registerCommand('scratch-space.showTemplates', async () => {
+			try {
+				const templates = templateManager.getAllTemplates();
+				const categories = templateManager.getAvailableCategories();
+				
+				// First, let user choose category or view all
+				const categoryItems = [
+					{ label: 'All Templates', description: `${templates.length} templates` },
+					...categories.map(cat => ({
+						label: cat,
+						description: `${templateManager.getTemplatesByCategory(cat).length} templates`
+					}))
+				];
+
+				const selectedCategory = await vscode.window.showQuickPick(categoryItems, {
+					placeHolder: 'Select a category to browse templates'
+				});
+
+				if (selectedCategory) {
+					const templatesToShow = selectedCategory.label === 'All Templates' 
+						? templates 
+						: templateManager.getTemplatesByCategory(selectedCategory.label);
+					
+					const templateItems = templatesToShow.map(template => ({
+						label: template.name,
+						description: template.language,
+						detail: template.description,
+						template: template
+					}));
+
+					const selectedTemplate = await vscode.window.showQuickPick(templateItems, {
+						placeHolder: 'Select a template to use',
+						matchOnDescription: true,
+						matchOnDetail: true
+					});
+
+					if (selectedTemplate) {
+						const template = selectedTemplate.template;
+						const scratchpad = await scratchpadManager.createScratchpad(
+							`${template.name} Scratchpad`,
+							template.language
+						);
+						
+						await scratchpadManager.updateScratchpad(scratchpad.id, {
+							content: template.content
+						});
+						
+						await scratchpadEditor.openScratchpad(scratchpad.id);
+					}
+				}
+			} catch (error) {
+				vscode.window.showErrorMessage(`Failed to browse templates: ${error}`);
+			}
+		}),
+
 		vscode.commands.registerCommand('scratch-space.openScratchpad', async (id: string) => {
 			try {
 				await scratchpadEditor.openScratchpad(id);
 			} catch (error) {
 				vscode.window.showErrorMessage(`Failed to open scratchpad: ${error}`);
+			}
+		}),
+
+		vscode.commands.registerCommand('scratch-space.changeLanguage', async (id: string) => {
+			try {
+				await scratchpadEditor.changeLanguage(id);
+			} catch (error) {
+				vscode.window.showErrorMessage(`Failed to change language: ${error}`);
 			}
 		}),
 

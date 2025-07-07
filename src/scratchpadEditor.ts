@@ -28,7 +28,7 @@ export class ScratchpadEditor {
 
     try {
       // Create a unique URI for this scratchpad using our file system provider
-      const uri = ScratchpadFileSystemProvider.createUri(scratchpad.id, scratchpad.name);
+      const uri = ScratchpadFileSystemProvider.createUri(scratchpad.id, scratchpad.name, scratchpad.language);
       
       // Check if document is already open
       let document = this.openDocuments.get(id);
@@ -165,6 +165,48 @@ export class ScratchpadEditor {
       } catch (error) {
         console.error('Error deleting scratchpad:', error);
         vscode.window.showErrorMessage(`Failed to delete scratchpad: ${error}`);
+      }
+    }
+  }
+
+  public async changeLanguage(id: string): Promise<void> {
+    const scratchpad = this.scratchpadManager.getScratchpad(id);
+    if (!scratchpad) {
+      vscode.window.showErrorMessage(`Scratchpad not found: ${id}`);
+      return;
+    }
+
+    const languages = [
+      'plaintext', 'javascript', 'typescript', 'python', 'html', 'css', 'scss', 'sass',
+      'json', 'markdown', 'xml', 'yaml', 'sql', 'shell', 'powershell', 'bat',
+      'java', 'csharp', 'cpp', 'c', 'php', 'ruby', 'go', 'rust', 'swift',
+      'kotlin', 'dart', 'perl', 'lua', 'r', 'matlab', 'julia', 'scala'
+    ];
+
+    const selectedLanguage = await vscode.window.showQuickPick(
+      languages.map(lang => ({
+        label: lang,
+        description: lang === scratchpad.language ? '(current)' : undefined
+      })),
+      {
+        placeHolder: `Select language for "${scratchpad.name}"`,
+        matchOnDescription: true
+      }
+    );
+
+    if (selectedLanguage && selectedLanguage.label !== scratchpad.language) {
+      try {
+        await this.scratchpadManager.changeLanguage(id, selectedLanguage.label);
+        vscode.window.showInformationMessage(`Language changed to ${selectedLanguage.label}`);
+        
+        // If the document is open, update its language mode
+        const document = this.openDocuments.get(id);
+        if (document) {
+          await vscode.languages.setTextDocumentLanguage(document, selectedLanguage.label);
+        }
+      } catch (error) {
+        console.error('Error changing language:', error);
+        vscode.window.showErrorMessage(`Failed to change language: ${error}`);
       }
     }
   }
