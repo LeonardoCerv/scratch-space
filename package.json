@@ -97,6 +97,31 @@
         "command": "scratch-space.importFromClipboard",
         "title": "Import from Clipboard",
         "icon": "$(clippy)"
+      },
+      {
+        "command": "scratch-space.showHistory",
+        "title": "Show History",
+        "icon": "$(history)"
+      },
+      {
+        "command": "scratch-space.searchHistory",
+        "title": "Search History",
+        "icon": "$(search)"
+      },
+      {
+        "command": "scratch-space.showBackups",
+        "title": "Show Backups",
+        "icon": "$(database)"
+      },
+      {
+        "command": "scratch-space.createManualBackup",
+        "title": "Create Manual Backup",
+        "icon": "$(save)"
+      },
+      {
+        "command": "scratch-space.restoreSession",
+        "title": "Restore Session",
+        "icon": "$(refresh)"
       }
     ],
     "views": {
@@ -132,9 +157,14 @@
           "group": "navigation@4"
         },
         {
-          "command": "scratch-space.refresh",
+          "command": "scratch-space.showHistory",
           "when": "view == scratchpadExplorer",
           "group": "navigation@5"
+        },
+        {
+          "command": "scratch-space.refresh",
+          "when": "view == scratchpadExplorer",
+          "group": "navigation@6"
         },
         {
           "command": "scratch-space.clearAllScratchpads",
@@ -227,6 +257,26 @@
           "title": "Scratch Space: Clear All Scratchpads"
         },
         {
+          "command": "scratch-space.showHistory",
+          "title": "Scratch Space: Show History"
+        },
+        {
+          "command": "scratch-space.searchHistory",
+          "title": "Scratch Space: Search History"
+        },
+        {
+          "command": "scratch-space.showBackups",
+          "title": "Scratch Space: Show Backups"
+        },
+        {
+          "command": "scratch-space.createManualBackup",
+          "title": "Scratch Space: Create Manual Backup"
+        },
+        {
+          "command": "scratch-space.restoreSession",
+          "title": "Scratch Space: Restore Session"
+        },
+        {
           "command": "scratch-space.openScratchpad",
           "when": "false"
         },
@@ -287,6 +337,36 @@
           "type": "boolean",
           "default": true,
           "description": "Show language badge in tree view"
+        },
+        "scratchSpace.historyEnabled": {
+          "type": "boolean",
+          "default": true,
+          "description": "Enable history tracking for scratchpads"
+        },
+        "scratchSpace.maxHistoryEntries": {
+          "type": "number",
+          "default": 100,
+          "description": "Maximum number of history entries to keep per scratchpad"
+        },
+        "scratchSpace.historyRetentionDays": {
+          "type": "number",
+          "default": 30,
+          "description": "Number of days to keep history entries"
+        },
+        "scratchSpace.sessionRecoveryEnabled": {
+          "type": "boolean",
+          "default": true,
+          "description": "Enable session recovery after unexpected shutdowns"
+        },
+        "scratchSpace.autoBackupInterval": {
+          "type": "number",
+          "default": 30,
+          "description": "Auto backup interval in seconds"
+        },
+        "scratchSpace.maxBackups": {
+          "type": "number",
+          "default": 50,
+          "description": "Maximum number of backups to keep"
         }
       }
     },
@@ -327,6 +407,17 @@
         "command": "scratch-space.scratchpadPalette",
         "key": "ctrl+alt+p",
         "mac": "cmd+alt+p"
+      },
+      {
+        "command": "scratch-space.showHistory",
+        "key": "ctrl+alt+h",
+        "mac": "cmd+alt+h"
+      },
+      {
+        "command": "scratch-space.createManualBackup",
+        "key": "ctrl+alt+b",
+        "mac": "cmd+alt+b",
+        "when": "editorTextFocus && resourceScheme == scratchpad"
       }
     ]
   },

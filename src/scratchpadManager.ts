@@ -1,6 +1,7 @@
 import * as vscode from 'vscode';
 import * as fs from 'fs';
 import * as path from 'path';
+import { HistoryManager } from './historyManager';
 
 export interface Scratchpad {
   id: string;
@@ -16,11 +17,13 @@ export class ScratchpadManager {
   private storageUri: vscode.Uri;
   private autoSaveTimeouts: Map<string, NodeJS.Timeout> = new Map();
   private onDidChangeScratchpads = new vscode.EventEmitter<void>();
+  private historyManager: HistoryManager;
   
   public readonly onDidChange = this.onDidChangeScratchpads.event;
 
   constructor(private context: vscode.ExtensionContext) {
     this.storageUri = vscode.Uri.joinPath(context.globalStorageUri, 'scratchpads');
+    this.historyManager = new HistoryManager(context);
     this.loadScratchpads();
   }
 
@@ -94,9 +97,32 @@ export class ScratchpadManager {
 
     this.scratchpads.set(id, scratchpad);
     await this.saveScratchpad(scratchpad);
+    
+    // Add to history
+    await this.addHistoryEntry(
+      id,
+      scratchpad.content,
+      'create',
+      { description: `Created scratchpad: ${scratchpadName}` }
+    );
+    
     this.onDidChangeScratchpads.fire();
     
     return scratchpad;
+  }
+
+  private async addHistoryEntry(
+    scratchpadId: string,
+    content: string,
+    changeType: 'create' | 'update' | 'delete' | 'rename' | 'language-change',
+    metadata?: any
+  ): Promise<void> {
+    const config = vscode.workspace.getConfiguration('scratchSpace');
+    const historyEnabled = config.get<boolean>('historyEnabled', true);
+    
+    if (historyEnabled) {
+      await this.historyManager.addHistoryEntry(scratchpadId, content, changeType, metadata);
+    }
   }
 
   public async updateScratchpad(id: string, updates: Partial<Scratchpad>): Promise<void> {
@@ -105,8 +131,19 @@ export class ScratchpadManager {
       throw new Error(`Scratchpad with id ${id} not found`);
     }
 
+    const previousContent = scratchpad.content;
     Object.assign(scratchpad, updates, { updatedAt: new Date() });
     this.scratchpads.set(id, scratchpad);
+    
+    // Add to history if content changed
+    if (updates.content !== undefined && updates.content !== previousContent) {
+      await this.addHistoryEntry(
+        id,
+        scratchpad.content,
+        'update',
+        { oldValue: previousContent, newValue: updates.content }
+      );
+    }
     
     const config = vscode.workspace.getConfiguration('scratchSpace');
     const autoSave = config.get<boolean>('autoSave');
@@ -144,6 +181,14 @@ export class ScratchpadManager {
     if (!scratchpad) {
       throw new Error(`Scratchpad with id ${id} not found`);
     }
+
+    // Add to history before deletion
+    await this.addHistoryEntry(
+      id,
+      scratchpad.content,
+      'delete',
+      { description: `Deleted scratchpad: ${scratchpad.name}` }
+    );
 
     this.scratchpads.delete(id);
     await this.deleteScratchpadFile(id);
@@ -187,8 +232,17 @@ export class ScratchpadManager {
       throw new Error(`Scratchpad with id ${id} not found`);
     }
 
+    const oldName = scratchpad.name;
     scratchpad.name = newName;
     scratchpad.updatedAt = new Date();
+    
+    // Add to history
+    await this.addHistoryEntry(
+      id,
+      scratchpad.content,
+      'rename',
+      { oldValue: oldName, newValue: newName, description: `Renamed from "${oldName}" to "${newName}"` }
+    );
     
     await this.saveScratchpad(scratchpad);
     this.onDidChangeScratchpads.fire();
@@ -200,8 +254,17 @@ export class ScratchpadManager {
       throw new Error(`Scratchpad with id ${id} not found`);
     }
 
+    const oldLanguage = scratchpad.language;
     scratchpad.language = newLanguage;
     scratchpad.updatedAt = new Date();
+    
+    // Add to history
+    await this.addHistoryEntry(
+      id,
+      scratchpad.content,
+      'language-change',
+      { oldValue: oldLanguage, newValue: newLanguage, description: `Changed language from ${oldLanguage} to ${newLanguage}` }
+    );
     
     await this.saveScratchpad(scratchpad);
     this.onDidChangeScratchpads.fire();
@@ -238,6 +301,11 @@ export class ScratchpadManager {
   public dispose(): void {
     this.autoSaveTimeouts.forEach(timeout => clearTimeout(timeout));
     this.autoSaveTimeouts.clear();
+    this.historyManager.dispose();
     this.onDidChangeScratchpads.dispose();
+  }
+
+  public getHistoryManager(): HistoryManager {
+    return this.historyManager;
   }
 }

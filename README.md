@@ -1,6 +1,38 @@
-# Scratch Space for VS Code
+# Scratch Space for VS Code- **Simple File Conversion**  
+    Right-click any file in the VS Code explorer to convert it to a scratchpad. Right-click any scratchpad to convert it back to a project file.
 
-A modern, lightweight extension that### File Conversion
+- **🆕 Searchable History**  
+    Track all changes with comprehensive history. Search through previous versions and restore content from any point in time.
+
+- **🆕 Session Recovery**  
+    Automatic crash detection and session restoration. Never lose work due to unexpected shutdowns with auto-backup and recovery features.
+
+- **Intuitive Tree View**  
+    Manage, rename, duplicate, and organize scratch files directly from the Explorer sidebar.
+
+- **Keyboard-Driven Workflow**  
+    Power users can leverage customizable shortcuts for all major actions: create, switch, export, import, and search.
+
+- **Zero Project Pollution**  
+    Scratchpads are isolated from your project's Git status, build tools, and linters—keep your workspace clean.
+
+---
+
+## 🔄 New Features
+
+### Searchable History
+- **Complete Change Tracking**: Records all scratchpad modifications including content changes, renames, and language switches
+- **Powerful Search**: Find specific changes using keywords and content search
+- **One-Click Restore**: Restore any scratchpad to a previous state with a single click
+- **Configurable Retention**: Set how long to keep history and how many entries to maintain
+
+### Session Recovery
+- **Crash Detection**: Automatically detects unexpected VS Code shutdowns
+- **Auto Backup**: Continuously backs up your work at configurable intervals
+- **Smart Recovery**: Restores open scratchpads, cursor positions, and editor state
+- **Manual Backups**: Create named backups of important scratchpad states
+
+---ightweight extension that### File Conversion
 
 - **Convert File to Scratchpad**:  
     Right-click any file in the Explorer → "Convert to Scratchpad"
@@ -121,10 +153,17 @@ Customize your workflow via settings:
     "scratchSpace.defaultLanguage": "plaintext",
     "scratchSpace.showTemplatePreview": true,
     "scratchSpace.favoriteTemplates": [],
-    "scratchSpace.showLanguageInTreeView": true
+    "scratchSpace.showLanguageInTreeView": true,
+    "scratchSpace.historyEnabled": true,
+    "scratchSpace.maxHistoryEntries": 100,
+    "scratchSpace.historyRetentionDays": 30,
+    "scratchSpace.sessionRecoveryEnabled": true,
+    "scratchSpace.autoBackupInterval": 30,
+    "scratchSpace.maxBackups": 50
 }
 ```
 
+### Core Settings
 - **autoSave**: Enable/disable auto-saving (default: true)
 - **autoSaveDelay**: Delay before auto-save (ms)
 - **defaultLanguage**: Default language for new scratchpads
@@ -132,21 +171,34 @@ Customize your workflow via settings:
 - **favoriteTemplates**: Array of favorite template IDs
 - **showLanguageInTreeView**: Show language badge in tree view
 
+### 🆕 History & Recovery Settings
+- **historyEnabled**: Enable/disable history tracking (default: true)
+- **maxHistoryEntries**: Maximum history entries per scratchpad (default: 100)
+- **historyRetentionDays**: Days to keep history entries (default: 30)
+- **sessionRecoveryEnabled**: Enable/disable session recovery (default: true)
+- **autoBackupInterval**: Auto backup interval in seconds (default: 30)
+- **maxBackups**: Maximum number of backups to keep (default: 50)
+
 ---
 
 ## 🧭 Commands Overview
 
-- `Scratch Space: New Scratchpad`
-- `Scratch Space: New Scratchpad from Template`
+- `Scratch Space: New Scratchpad` — `Ctrl/Cmd + Alt + N`
+- `Scratch Space: New Scratchpad from Template` — `Ctrl/Cmd + Alt + T`
 - `Scratch Space: Browse Templates`
-- `Scratch Space: Convert File to Scratchpad`
-- `Scratch Space: Convert Scratchpad to File`
+- `Scratch Space: Convert File to Scratchpad` — `Ctrl/Cmd + Alt + I`
+- `Scratch Space: Convert Scratchpad to File` — `Ctrl/Cmd + Alt + E`
 - `Scratch Space: Import from Clipboard`
-- `Scratch Space: Quick Open`
-- `Scratch Space: Switch Scratchpad`
+- `Scratch Space: Quick Open` — `Ctrl/Cmd + Alt + O`
+- `Scratch Space: Switch Scratchpad` — `Ctrl/Cmd + Alt + S`
 - `Scratch Space: Search Scratchpads`
-- `Scratch Space: Command Palette`
+- `Scratch Space: Command Palette` — `Ctrl/Cmd + Alt + P`
 - `Scratch Space: Clear All Scratchpads`
+- **🆕 `Scratch Space: Show History`** — `Ctrl/Cmd + Alt + H`
+- **🆕 `Scratch Space: Search History`**
+- **🆕 `Scratch Space: Show Backups`**
+- **🆕 `Scratch Space: Create Manual Backup`** — `Ctrl/Cmd + Alt + B`
+- **🆕 `Scratch Space: Restore Session`**
 
 ---
 

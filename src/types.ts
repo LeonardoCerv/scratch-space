@@ -52,3 +52,42 @@ export const TEMPLATE_CATEGORIES = [
 ] as const;
 
 export type TemplateCategory = typeof TEMPLATE_CATEGORIES[number];
+
+export interface HistoryEntry {
+  id: string;
+  scratchpadId: string;
+  content: string;
+  timestamp: Date;
+  changeType: 'create' | 'update' | 'delete' | 'rename' | 'language-change';
+  metadata?: {
+    oldValue?: string;
+    newValue?: string;
+    description?: string;
+  };
+}
+
+export interface HistorySearchResult {
+  entry: HistoryEntry;
+  relevanceScore: number;
+  matchingContext: string;
+}
+
+export interface SessionState {
+  activeScratchpadId?: string;
+  openScratchpadIds: string[];
+  viewState: {
+    [scratchpadId: string]: {
+      selection?: vscode.Selection;
+      visibleRanges?: vscode.Range[];
+      scrollTop?: number;
+    };
+  };
+  timestamp: Date;
+}
+
+export interface BackupEntry {
+  scratchpadId: string;
+  content: string;
+  timestamp: Date;
+  autoBackup: boolean;
+}
