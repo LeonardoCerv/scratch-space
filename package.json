@@ -1,8 +1,13 @@
 {
   "name": "scratch-space",
   "displayName": "Scratch Space",
+  "publisher": "LeonardoCerv",
   "description": "Lightweight, temporary tabs for quick code experiments and notes",
   "version": "0.0.1",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/LeonardoCerv/scratch-space.git"
+  },
   "engines": {
     "vscode": "^1.101.0"
   },
