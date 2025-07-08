@@ -411,4 +411,9 @@ export class ImportExportManager {
 
     return filters;
   }
+
+  // Make the class disposable
+  public dispose(): void {
+    // Clean up any resources if needed
+  }
 }

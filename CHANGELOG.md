@@ -7,3 +7,5 @@ Check [Keep a Changelog](http://keepachangelog.com/) for recommendations on how 
 ## [Unreleased]
 
 - Initial release
+- Removed hover buttons from scratchpad file items in the tree view
+- Moved rename, delete and duplicate functions to the context menu for better usability

@@ -21,18 +21,8 @@
         "icon": "$(add)"
       },
       {
-        "command": "scratch-space.newScratchpadWithTemplate",
-        "title": "New Scratchpad from Template",
-        "icon": "$(file-add)"
-      },
-      {
         "command": "scratch-space.openScratchpad",
         "title": "Open Scratchpad"
-      },
-      {
-        "command": "scratch-space.changeLanguage",
-        "title": "Change Language",
-        "icon": "$(symbol-keyword)"
       },
       {
         "command": "scratch-space.deleteScratchpad",
@@ -122,6 +112,56 @@
         "command": "scratch-space.restoreSession",
         "title": "Restore Session",
         "icon": "$(refresh)"
+      },
+      {
+        "command": "scratch-space.togglePin",
+        "title": "Toggle Pin",
+        "icon": "$(pin)"
+      },
+      {
+        "command": "scratch-space.addTag",
+        "title": "Add Tag",
+        "icon": "$(tag)"
+      },
+      {
+        "command": "scratch-space.removeTag",
+        "title": "Remove Tag",
+        "icon": "$(x)"
+      },
+      {
+        "command": "scratch-space.setColor",
+        "title": "Set Color",
+        "icon": "$(symbol-color)"
+      },
+      {
+        "command": "scratch-space.filterByTag",
+        "title": "Filter by Tag",
+        "icon": "$(filter)"
+      },
+      {
+        "command": "scratch-space.groupByTags",
+        "title": "Group by Tags",
+        "icon": "$(group-by-ref-type)"
+      },
+      {
+        "command": "scratch-space.sortScratchpads",
+        "title": "Sort Scratchpads",
+        "icon": "$(sort-precedence)"
+      },
+      {
+        "command": "scratch-space.quickPaste",
+        "title": "Quick Paste from Clipboard",
+        "icon": "$(clippy)"
+      },
+      {
+        "command": "scratch-space.pasteToNew",
+        "title": "Paste to New Scratchpad",
+        "icon": "$(add)"
+      },
+      {
+        "command": "scratch-space.pasteToActive",
+        "title": "Paste to Active Scratchpad",
+        "icon": "$(edit)"
       }
     ],
     "views": {
@@ -141,11 +181,7 @@
           "when": "view == scratchpadExplorer",
           "group": "navigation@1"
         },
-        {
-          "command": "scratch-space.newScratchpadWithTemplate",
-          "when": "view == scratchpadExplorer",
-          "group": "navigation@2"
-        },
+
         {
           "command": "scratch-space.showTemplates",
           "when": "view == scratchpadExplorer",
@@ -170,33 +206,53 @@
           "command": "scratch-space.clearAllScratchpads",
           "when": "view == scratchpadExplorer",
           "group": "1_clearAll"
+        },
+        {
+          "command": "scratch-space.filterByTag",
+          "when": "view == scratchpadExplorer",
+          "group": "2_filter@1"
+        },
+        {
+          "command": "scratch-space.groupByTags",
+          "when": "view == scratchpadExplorer",
+          "group": "2_filter@2"
+        },
+        {
+          "command": "scratch-space.sortScratchpads",
+          "when": "view == scratchpadExplorer",
+          "group": "2_filter@3"
         }
       ],
       "view/item/context": [
         {
-          "command": "scratch-space.openScratchpad",
-          "when": "view == scratchpadExplorer && viewItem == scratchpad",
-          "group": "inline@1"
-        },
-        {
-          "command": "scratch-space.changeLanguage",
-          "when": "view == scratchpadExplorer && viewItem == scratchpad",
-          "group": "inline@2"
-        },
-        {
           "command": "scratch-space.renameScratchpad",
           "when": "view == scratchpadExplorer && viewItem == scratchpad",
-          "group": "inline@3"
+          "group": "editing@1"
         },
         {
           "command": "scratch-space.duplicateScratchpad",
           "when": "view == scratchpadExplorer && viewItem == scratchpad",
-          "group": "inline@4"
+          "group": "editing@2"
         },
         {
           "command": "scratch-space.deleteScratchpad",
           "when": "view == scratchpadExplorer && viewItem == scratchpad",
-          "group": "inline@5"
+          "group": "editing@3"
+        },
+        {
+          "command": "scratch-space.togglePin",
+          "when": "view == scratchpadExplorer && viewItem == scratchpad",
+          "group": "1_actions@1"
+        },
+        {
+          "command": "scratch-space.addTag",
+          "when": "view == scratchpadExplorer && viewItem == scratchpad",
+          "group": "1_actions@2"
+        },
+        {
+          "command": "scratch-space.setColor",
+          "when": "view == scratchpadExplorer && viewItem == scratchpad",
+          "group": "1_actions@3"
         },
         {
           "command": "scratch-space.convertScratchpadToFile",
@@ -216,10 +272,7 @@
           "command": "scratch-space.newScratchpad",
           "title": "Scratch Space: New Scratchpad"
         },
-        {
-          "command": "scratch-space.newScratchpadWithTemplate",
-          "title": "Scratch Space: New Scratchpad from Template"
-        },
+
         {
           "command": "scratch-space.showTemplates",
           "title": "Scratch Space: Browse Templates"
@@ -282,20 +335,17 @@
         },
         {
           "command": "scratch-space.deleteScratchpad",
-          "when": "false"
+          "title": "Scratch Space: Delete Scratchpad"
         },
         {
           "command": "scratch-space.renameScratchpad",
-          "when": "false"
+          "title": "Scratch Space: Rename Scratchpad"
         },
         {
           "command": "scratch-space.duplicateScratchpad",
-          "when": "false"
+          "title": "Scratch Space: Duplicate Scratchpad"
         },
-        {
-          "command": "scratch-space.changeLanguage",
-          "when": "false"
-        },
+
         {
           "command": "scratch-space.refresh",
           "when": "false"
@@ -367,6 +417,37 @@
           "type": "number",
           "default": 50,
           "description": "Maximum number of backups to keep"
+        },
+        "scratchSpace.enablePinning": {
+          "type": "boolean",
+          "default": true,
+          "description": "Enable pinning scratchpads to the top"
+        },
+        "scratchSpace.enableTagging": {
+          "type": "boolean",
+          "default": true,
+          "description": "Enable tagging system for scratchpads"
+        },
+        "scratchSpace.enableColorCoding": {
+          "type": "boolean",
+          "default": true,
+          "description": "Enable color coding for scratchpads"
+        },
+        "scratchSpace.enableDragAndDrop": {
+          "type": "boolean",
+          "default": true,
+          "description": "Enable drag and drop reordering of scratchpads"
+        },
+        "scratchSpace.defaultSortOrder": {
+          "type": "string",
+          "default": "custom",
+          "enum": ["name", "created", "updated", "custom"],
+          "description": "Default sort order for scratchpads"
+        },
+        "scratchSpace.groupByTagsDefault": {
+          "type": "boolean",
+          "default": false,
+          "description": "Default to grouping scratchpads by tags"
         }
       }
     },
@@ -376,11 +457,7 @@
         "key": "ctrl+alt+n",
         "mac": "cmd+alt+n"
       },
-      {
-        "command": "scratch-space.newScratchpadWithTemplate",
-        "key": "ctrl+alt+t",
-        "mac": "cmd+alt+t"
-      },
+
       {
         "command": "scratch-space.quickOpen",
         "key": "ctrl+alt+o",
@@ -390,6 +467,21 @@
         "command": "scratch-space.switchScratchpad",
         "key": "ctrl+alt+s",
         "mac": "cmd+alt+s"
+      },
+      {
+        "command": "scratch-space.quickPaste",
+        "key": "ctrl+alt+v",
+        "mac": "cmd+alt+v"
+      },
+      {
+        "command": "scratch-space.pasteToNew",
+        "key": "ctrl+alt+shift+v",
+        "mac": "cmd+alt+shift+v"
+      },
+      {
+        "command": "scratch-space.filterByTag",
+        "key": "ctrl+alt+f",
+        "mac": "cmd+alt+f"
       },
       {
         "command": "scratch-space.convertScratchpadToFile",

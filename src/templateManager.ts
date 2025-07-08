@@ -581,4 +581,10 @@ ORDER BY signup_date DESC;`,
     }
     return Array.from(categories).sort();
   }
+
+  // Implements the dispose method to make this class disposable
+  public dispose(): void {
+    // Clean up resources if needed
+    this.templates.clear();
+  }
 }

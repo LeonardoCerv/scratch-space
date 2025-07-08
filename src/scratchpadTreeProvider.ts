@@ -1,5 +1,6 @@
 import * as vscode from 'vscode';
-import { Scratchpad, ScratchpadManager } from './scratchpadManager';
+import { Scratchpad } from './types';
+import { ScratchpadManager } from './scratchpadManager';
 
 export class ScratchpadTreeProvider implements vscode.TreeDataProvider<ScratchpadItem> {
   private _onDidChangeTreeData: vscode.EventEmitter<ScratchpadItem | undefined | null | void> = new vscode.EventEmitter<ScratchpadItem | undefined | null | void>();
@@ -10,6 +11,16 @@ export class ScratchpadTreeProvider implements vscode.TreeDataProvider<Scratchpa
     this.scratchpadManager.onDidChange(() => {
       this._onDidChangeTreeData.fire();
     });
+  }
+
+  public setFilter(filter: any): void {
+    // Placeholder method for compatibility
+    this._onDidChangeTreeData.fire();
+  }
+
+  public setGroupByTags(groupByTags: boolean): void {
+    // Placeholder method for compatibility
+    this._onDidChangeTreeData.fire();
   }
 
   refresh(): void {
@@ -32,9 +43,7 @@ export class ScratchpadTreeProvider implements vscode.TreeDataProvider<Scratchpa
 }
 
 export class ScratchpadItem extends vscode.TreeItem {
-  constructor(
-    public readonly scratchpad: Scratchpad
-  ) {
+  constructor(public readonly scratchpad: Scratchpad) {
     super(scratchpad.name, vscode.TreeItemCollapsibleState.None);
     
     this.tooltip = this.createTooltip();
@@ -64,9 +73,6 @@ Updated: ${updated}`;
   }
 
   private createDescription(): string {
-    const config = vscode.workspace.getConfiguration('scratchSpace');
-    const showLanguage = config.get<boolean>('showLanguageInTreeView');
-    
     const lines = this.scratchpad.content.split('\n').length;
     let description = '';
     
@@ -78,14 +84,15 @@ Updated: ${updated}`;
       description = 'empty';
     }
     
-    if (showLanguage && this.scratchpad.language && this.scratchpad.language !== 'plaintext') {
-      description += ` • ${this.scratchpad.language}`;
-    }
-    
     return description;
   }
 
   private getIcon(): vscode.ThemeIcon {
+    // Show pin icon for pinned scratchpads
+    if (this.scratchpad.pinned) {
+      return new vscode.ThemeIcon('pinned');
+    }
+    
     // Choose icon based on language
     switch (this.scratchpad.language) {
       case 'javascript':
@@ -98,13 +105,13 @@ Updated: ${updated}`;
       case 'markdown':
         return new vscode.ThemeIcon('markdown');
       case 'html':
-        return new vscode.ThemeIcon('globe');
+        return new vscode.ThemeIcon('symbol-tag');
       case 'css':
       case 'scss':
       case 'sass':
         return new vscode.ThemeIcon('symbol-color');
       default:
-        return new vscode.ThemeIcon('note');
+        return new vscode.ThemeIcon('file');
     }
   }
 }

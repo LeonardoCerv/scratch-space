@@ -129,11 +129,6 @@ export class QuickNavigationManager {
           action: 'new'
         },
         {
-          label: '$(file-add) New from Template',
-          description: 'Create a scratchpad from a template',
-          action: 'template'
-        },
-        {
           label: '$(import) Import from File',
           description: 'Import a file as a scratchpad',
           action: 'import'
@@ -193,9 +188,6 @@ export class QuickNavigationManager {
     switch (action.action) {
       case 'new':
         await vscode.commands.executeCommand('scratch-space.newScratchpad');
-        break;
-      case 'template':
-        await vscode.commands.executeCommand('scratch-space.newScratchpadWithTemplate');
         break;
       case 'import':
         await vscode.commands.executeCommand('scratch-space.importFromFile');

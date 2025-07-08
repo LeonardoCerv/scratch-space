@@ -2,15 +2,9 @@ import * as vscode from 'vscode';
 import * as fs from 'fs';
 import * as path from 'path';
 import { HistoryManager } from './historyManager';
+import { Scratchpad, ScratchpadFilter } from './types';
 
-export interface Scratchpad {
-  id: string;
-  name: string;
-  content: string;
-  language: string;
-  createdAt: Date;
-  updatedAt: Date;
-}
+export { Scratchpad } from './types';
 
 export class ScratchpadManager {
   private scratchpads: Map<string, Scratchpad> = new Map();
@@ -49,6 +43,11 @@ export class ScratchpadManager {
           // Convert date strings back to Date objects
           scratchpad.createdAt = new Date(scratchpad.createdAt);
           scratchpad.updatedAt = new Date(scratchpad.updatedAt);
+          
+          // Ensure new properties exist for backwards compatibility
+          if (scratchpad.pinned === undefined) scratchpad.pinned = false;
+          if (!scratchpad.tags) scratchpad.tags = [];
+          if (scratchpad.sortOrder === undefined) scratchpad.sortOrder = 0;
           
           this.scratchpads.set(scratchpad.id, scratchpad);
         }
@@ -92,7 +91,10 @@ export class ScratchpadManager {
       content: '',
       language: scratchpadLanguage,
       createdAt: new Date(),
-      updatedAt: new Date()
+      updatedAt: new Date(),
+      pinned: false,
+      tags: [],
+      sortOrder: this.scratchpads.size
     };
 
     this.scratchpads.set(id, scratchpad);
@@ -216,7 +218,11 @@ export class ScratchpadManager {
       content: original.content,
       language: original.language,
       createdAt: new Date(),
-      updatedAt: new Date()
+      updatedAt: new Date(),
+      pinned: false,
+      tags: [...original.tags],
+      color: original.color,
+      sortOrder: this.scratchpads.size
     };
 
     this.scratchpads.set(newId, duplicate);
@@ -268,6 +274,180 @@ export class ScratchpadManager {
     
     await this.saveScratchpad(scratchpad);
     this.onDidChangeScratchpads.fire();
+  }
+
+  // Pin/Unpin scratchpad
+  public async togglePin(id: string): Promise<void> {
+    const scratchpad = this.scratchpads.get(id);
+    if (!scratchpad) {
+      throw new Error(`Scratchpad with id ${id} not found`);
+    }
+
+    const oldPinned = scratchpad.pinned;
+    scratchpad.pinned = !scratchpad.pinned;
+    scratchpad.updatedAt = new Date();
+
+    await this.saveScratchpad(scratchpad);
+    await this.historyManager.addHistoryEntry(
+      id,
+      scratchpad.content,
+      'update',
+      { description: `${oldPinned ? 'Unpinned' : 'Pinned'} scratchpad` }
+    );
+    
+    this.onDidChangeScratchpads.fire();
+  }
+
+  // Add/Remove tags
+  public async addTag(id: string, tag: string): Promise<void> {
+    const scratchpad = this.scratchpads.get(id);
+    if (!scratchpad) {
+      throw new Error(`Scratchpad with id ${id} not found`);
+    }
+
+    if (!scratchpad.tags.includes(tag)) {
+      scratchpad.tags.push(tag);
+      scratchpad.updatedAt = new Date();
+      
+      await this.saveScratchpad(scratchpad);
+      await this.historyManager.addHistoryEntry(
+        id,
+        scratchpad.content,
+        'update',
+        { description: `Added tag: ${tag}` }
+      );
+      
+      this.onDidChangeScratchpads.fire();
+    }
+  }
+
+  public async removeTag(id: string, tag: string): Promise<void> {
+    const scratchpad = this.scratchpads.get(id);
+    if (!scratchpad) {
+      throw new Error(`Scratchpad with id ${id} not found`);
+    }
+
+    const index = scratchpad.tags.indexOf(tag);
+    if (index > -1) {
+      scratchpad.tags.splice(index, 1);
+      scratchpad.updatedAt = new Date();
+      
+      await this.saveScratchpad(scratchpad);
+      await this.historyManager.addHistoryEntry(
+        id,
+        scratchpad.content,
+        'update',
+        { description: `Removed tag: ${tag}` }
+      );
+      
+      this.onDidChangeScratchpads.fire();
+    }
+  }
+
+  // Set color
+  public async setColor(id: string, color: string): Promise<void> {
+    const scratchpad = this.scratchpads.get(id);
+    if (!scratchpad) {
+      throw new Error(`Scratchpad with id ${id} not found`);
+    }
+
+    const oldColor = scratchpad.color;
+    scratchpad.color = color;
+    scratchpad.updatedAt = new Date();
+
+    await this.saveScratchpad(scratchpad);
+    await this.historyManager.addHistoryEntry(
+      id,
+      scratchpad.content,
+      'update',
+      { description: `Changed color from ${oldColor || 'default'} to ${color}` }
+    );
+    
+    this.onDidChangeScratchpads.fire();
+  }
+
+  // Update sort order
+  public async updateSortOrder(id: string, sortOrder: number): Promise<void> {
+    const scratchpad = this.scratchpads.get(id);
+    if (!scratchpad) {
+      throw new Error(`Scratchpad with id ${id} not found`);
+    }
+
+    scratchpad.sortOrder = sortOrder;
+    scratchpad.updatedAt = new Date();
+
+    await this.saveScratchpad(scratchpad);
+    this.onDidChangeScratchpads.fire();
+  }
+
+  // Get filtered and sorted scratchpads
+  public getFilteredScratchpads(filter?: ScratchpadFilter): Scratchpad[] {
+    let scratchpads = Array.from(this.scratchpads.values());
+
+    // Apply filters
+    if (filter) {
+      if (filter.tags && filter.tags.length > 0) {
+        scratchpads = scratchpads.filter(sp => 
+          filter.tags!.some(tag => sp.tags.includes(tag))
+        );
+      }
+      
+      if (filter.language) {
+        scratchpads = scratchpads.filter(sp => sp.language === filter.language);
+      }
+      
+      if (filter.pinned !== undefined) {
+        scratchpads = scratchpads.filter(sp => sp.pinned === filter.pinned);
+      }
+    }
+
+    // Sort scratchpads
+    const sortBy = filter?.sortBy || 'custom';
+    const sortOrder = filter?.sortOrder || 'asc';
+    
+    scratchpads.sort((a, b) => {
+      let comparison = 0;
+      
+      // Pinned items always come first
+      if (a.pinned && !b.pinned) return -1;
+      if (!a.pinned && b.pinned) return 1;
+      
+      switch (sortBy) {
+        case 'name':
+          comparison = a.name.localeCompare(b.name);
+          break;
+        case 'created':
+          comparison = a.createdAt.getTime() - b.createdAt.getTime();
+          break;
+        case 'updated':
+          comparison = a.updatedAt.getTime() - b.updatedAt.getTime();
+          break;
+        case 'custom':
+          comparison = (a.sortOrder || 0) - (b.sortOrder || 0);
+          break;
+      }
+      
+      return sortOrder === 'desc' ? -comparison : comparison;
+    });
+
+    return scratchpads;
+  }
+
+  // Get all unique tags
+  public getAllTags(): string[] {
+    const tags = new Set<string>();
+    for (const scratchpad of this.scratchpads.values()) {
+      scratchpad.tags.forEach(tag => tags.add(tag));
+    }
+    return Array.from(tags).sort();
+  }
+
+  // Bulk operations
+  public async reorderScratchpads(ids: string[]): Promise<void> {
+    const promises = ids.map((id, index) => 
+      this.updateSortOrder(id, index)
+    );
+    await Promise.all(promises);
   }
 
   public async clearAllScratchpads(): Promise<void> {

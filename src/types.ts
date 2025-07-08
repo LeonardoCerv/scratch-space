@@ -7,6 +7,10 @@ export interface Scratchpad {
   language: string;
   createdAt: Date;
   updatedAt: Date;
+  pinned: boolean;
+  tags: string[];
+  color?: string;
+  sortOrder?: number;
 }
 
 export interface TemplateSnippet {
@@ -91,3 +95,30 @@ export interface BackupEntry {
   timestamp: Date;
   autoBackup: boolean;
 }
+
+export interface ScratchpadTreeItem {
+  id: string;
+  name: string;
+  type: 'scratchpad' | 'category' | 'tag';
+  scratchpad?: Scratchpad;
+  children?: ScratchpadTreeItem[];
+  tags?: string[];
+  color?: string;
+  pinned?: boolean;
+}
+
+export interface ScratchpadFilter {
+  tags?: string[];
+  language?: string;
+  pinned?: boolean;
+  sortBy?: 'name' | 'created' | 'updated' | 'custom';
+  sortOrder?: 'asc' | 'desc';
+}
+
+// Predefined colors for scratchpads
+export const SCRATCHPAD_COLORS = [
+  '#FF6B6B', '#4ECDC4', '#45B7D1', '#96CEB4', '#FFEAA7',
+  '#DDA0DD', '#98D8C8', '#F7DC6F', '#BB8FCE', '#85C1E9'
+] as const;
+
+export type ScratchpadColor = typeof SCRATCHPAD_COLORS[number];

@@ -1,45 +1,6 @@
-# Scratch Space for VS Code- **Simple File Conversion**  
-    Right-click any file in the VS Code explorer to convert it to a scratchpad. Right-click any scratchpad to convert it back to a project file.
+# Scratch Space for VS Code
 
-- **🆕 Searchable History**  
-    Track all changes with comprehensive history. Search through previous versions and restore content from any point in time.
-
-- **🆕 Session Recovery**  
-    Automatic crash detection and session restoration. Never lose work due to unexpected shutdowns with auto-backup and recovery features.
-
-- **Intuitive Tree View**  
-    Manage, rename, duplicate, and organize scratch files directly from the Explorer sidebar.
-
-- **Keyboard-Driven Workflow**  
-    Power users can leverage customizable shortcuts for all major actions: create, switch, export, import, and search.
-
-- **Zero Project Pollution**  
-    Scratchpads are isolated from your project's Git status, build tools, and linters—keep your workspace clean.
-
----
-
-## 🔄 New Features
-
-### Searchable History
-- **Complete Change Tracking**: Records all scratchpad modifications including content changes, renames, and language switches
-- **Powerful Search**: Find specific changes using keywords and content search
-- **One-Click Restore**: Restore any scratchpad to a previous state with a single click
-- **Configurable Retention**: Set how long to keep history and how many entries to maintain
-
-### Session Recovery
-- **Crash Detection**: Automatically detects unexpected VS Code shutdowns
-- **Auto Backup**: Continuously backs up your work at configurable intervals
-- **Smart Recovery**: Restores open scratchpads, cursor positions, and editor state
-- **Manual Backups**: Create named backups of important scratchpad states
-
----ightweight extension that### File Conversion
-
-- **Convert File to Scratchpad**:  
-    Right-click any file in the Explorer → "Convert to Scratchpad"
-- **Convert Scratchpad to File**:  
-    Right-click any scratchpad in the tree → "Convert to File"
-- **Import from Clipboard**:  
-    `Ctrl/Cmd + Shift + P` → "Scratch Space: Import from Clipboard"a dedicated scratchpad environment to Visual Studio Code. Effortlessly experiment, prototype, and iterate—without cluttering your project workspace.
+A powerful and lightweight extension that brings a dedicated scratchpad environment to Visual Studio Code. Effortlessly experiment, prototype, and iterate—without cluttering your project workspace.
 
 ---
 
@@ -47,6 +8,57 @@
 
 - **Unlimited Scratchpads**  
     Instantly create, name, and organize as many scratch files as you need—each with full language support and syntax highlighting.
+
+- **🆕 Enhanced Management**  
+    Pin favorite scratchpads, organize with tags, apply color coding, and drag & drop to reorder. Complete visual organization system.
+
+- **🆕 Quick Paste from Clipboard**  
+    Instantly paste clipboard content into scratchpads with smart language detection. One-click productivity boost.
+
+- **Rich Template System**  
+    Jumpstart your work with built-in templates for common languages and frameworks. Create custom templates for your workflow.
+
+- **🆕 Searchable History**  
+    Track all changes with comprehensive history. Search through previous versions and restore content from any point in time.
+
+- **🆕 Session Recovery**  
+    Automatic crash detection and session restoration. Never lose work due to unexpected shutdowns with auto-backup and recovery features.
+
+- **Simple File Conversion**  
+    Right-click any file in the VS Code explorer to convert it to a scratchpad. Right-click any scratchpad to convert it back to a project file.
+
+- **Intuitive Tree View**  
+    Manage, rename, duplicate, and organize scratch files directly from the Explorer sidebar with enhanced visual features.
+
+- **Keyboard-Driven Workflow**  
+    Power users can leverage customizable shortcuts for all major actions: create, switch, export, import, search, and quick paste.
+
+- **Zero Project Pollution**  
+    Scratchpads are isolated from your project's Git status, build tools, and linters—keep your workspace clean.
+
+---
+
+## 🔄 New Enhanced Features
+
+### Scratchpad Management
+- **Pinned Scratchpads**: Keep important scratchpads at the top of the list
+- **Tag System**: Organize scratchpads with custom tags (todo, experiment, important, etc.)
+- **Color Coding**: Visual organization with 10 predefined colors
+- **Drag & Drop**: Reorder scratchpads like browser tabs
+- **Smart Filtering**: Filter by tags, language, or pin status
+- **Group by Tags**: Toggle between flat and grouped views
+
+### Quick Paste System
+- **Instant Productivity**: `Ctrl+Alt+V` for quick paste options
+- **Smart Detection**: Automatically detects content type (JSON, JavaScript, Python, etc.)
+- **Multiple Options**: Paste to new scratchpad, active scratchpad, or choose existing
+- **Keyboard Shortcuts**: `Ctrl+Alt+Shift+V` for paste to new scratchpad
+
+### Advanced Organization
+- **Custom Sorting**: Sort by name, creation date, last updated, or custom order
+- **Bulk Operations**: Apply tags to multiple scratchpads at once
+- **Visual Indicators**: Pin icons, tag badges, and color decorations
+- **Persistent State**: All organization settings saved across sessions
 
 - **Rich Language Support**  
     Over 30 programming languages, including JavaScript, TypeScript, Python, HTML, CSS, SQL, JSON, Markdown, Go, Rust, and more.
@@ -159,7 +171,13 @@ Customize your workflow via settings:
     "scratchSpace.historyRetentionDays": 30,
     "scratchSpace.sessionRecoveryEnabled": true,
     "scratchSpace.autoBackupInterval": 30,
-    "scratchSpace.maxBackups": 50
+    "scratchSpace.maxBackups": 50,
+    "scratchSpace.enablePinning": true,
+    "scratchSpace.enableTagging": true,
+    "scratchSpace.enableColorCoding": true,
+    "scratchSpace.enableDragAndDrop": true,
+    "scratchSpace.defaultSortOrder": "custom",
+    "scratchSpace.groupByTagsDefault": false
 }
 ```
 
@@ -178,6 +196,14 @@ Customize your workflow via settings:
 - **sessionRecoveryEnabled**: Enable/disable session recovery (default: true)
 - **autoBackupInterval**: Auto backup interval in seconds (default: 30)
 - **maxBackups**: Maximum number of backups to keep (default: 50)
+
+### 🔥 Enhanced Management Settings
+- **enablePinning**: Enable pinning scratchpads to the top (default: true)
+- **enableTagging**: Enable tagging system for scratchpads (default: true)
+- **enableColorCoding**: Enable color coding for scratchpads (default: true)
+- **enableDragAndDrop**: Enable drag and drop reordering (default: true)
+- **defaultSortOrder**: Default sort order (name, created, updated, custom)
+- **groupByTagsDefault**: Default to grouping scratchpads by tags (default: false)
 
 ---
 
@@ -199,6 +225,17 @@ Customize your workflow via settings:
 - **🆕 `Scratch Space: Show Backups`**
 - **🆕 `Scratch Space: Create Manual Backup`** — `Ctrl/Cmd + Alt + B`
 - **🆕 `Scratch Space: Restore Session`**
+
+### 🔥 Enhanced Management Commands
+- **🆕 `Scratch Space: Quick Paste from Clipboard`** — `Ctrl/Cmd + Alt + V`
+- **🆕 `Scratch Space: Paste to New Scratchpad`** — `Ctrl/Cmd + Alt + Shift + V`
+- **🆕 `Scratch Space: Paste to Active Scratchpad`**
+- **🆕 `Scratch Space: Toggle Pin`** — Pin/unpin scratchpads
+- **🆕 `Scratch Space: Add Tag`** — Add custom tags
+- **🆕 `Scratch Space: Set Color`** — Apply color coding
+- **🆕 `Scratch Space: Filter by Tag`** — `Ctrl/Cmd + Alt + F`
+- **🆕 `Scratch Space: Group by Tags`** — Toggle tag grouping
+- **🆕 `Scratch Space: Sort Scratchpads`** — Custom sort options
 
 ---
 
