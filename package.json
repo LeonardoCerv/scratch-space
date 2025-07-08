@@ -152,21 +152,6 @@
         "command": "scratch-space.sortScratchpads",
         "title": "Sort Scratchpads",
         "icon": "$(sort-precedence)"
-      },
-      {
-        "command": "scratch-space.quickPaste",
-        "title": "Quick Paste from Clipboard",
-        "icon": "$(clippy)"
-      },
-      {
-        "command": "scratch-space.pasteToNew",
-        "title": "Paste to New Scratchpad",
-        "icon": "$(add)"
-      },
-      {
-        "command": "scratch-space.pasteToActive",
-        "title": "Paste to Active Scratchpad",
-        "icon": "$(edit)"
       }
     ],
     "views": {
@@ -473,16 +458,7 @@
         "key": "ctrl+alt+s",
         "mac": "cmd+alt+s"
       },
-      {
-        "command": "scratch-space.quickPaste",
-        "key": "ctrl+alt+v",
-        "mac": "cmd+alt+v"
-      },
-      {
-        "command": "scratch-space.pasteToNew",
-        "key": "ctrl+alt+shift+v",
-        "mac": "cmd+alt+shift+v"
-      },
+      
       {
         "command": "scratch-space.filterByTag",
         "key": "ctrl+alt+f",

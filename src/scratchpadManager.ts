@@ -45,9 +45,9 @@ export class ScratchpadManager {
           scratchpad.updatedAt = new Date(scratchpad.updatedAt);
           
           // Ensure new properties exist for backwards compatibility
-          if (scratchpad.pinned === undefined) scratchpad.pinned = false;
-          if (!scratchpad.tags) scratchpad.tags = [];
-          if (scratchpad.sortOrder === undefined) scratchpad.sortOrder = 0;
+          if (scratchpad.pinned === undefined) {scratchpad.pinned = false;}
+          if (!scratchpad.tags) {scratchpad.tags = [];}
+          if (scratchpad.sortOrder === undefined) {scratchpad.sortOrder = 0;}
           
           this.scratchpads.set(scratchpad.id, scratchpad);
         }
@@ -409,8 +409,8 @@ export class ScratchpadManager {
       let comparison = 0;
       
       // Pinned items always come first
-      if (a.pinned && !b.pinned) return -1;
-      if (!a.pinned && b.pinned) return 1;
+      if (a.pinned && !b.pinned) {return -1;}
+      if (!a.pinned && b.pinned) {return 1;}
       
       switch (sortBy) {
         case 'name':

@@ -13,8 +13,6 @@ let templateManager: TemplateManager;
 
 // This method is called when your extension is activated
 export function activate(context: vscode.ExtensionContext) {
-	console.log('Scratch Space extension is now active!');
-
 	try {
 		// Initialize the scratchpad system step by step
 		scratchpadManager = new ScratchpadManager(context);
@@ -298,8 +296,6 @@ export function activate(context: vscode.ExtensionContext) {
 		// Add other disposables
 		context.subscriptions.push(treeView, scratchpadManager, scratchpadEditor, importExportManager, templateManager);
 
-		console.log('Scratch Space extension initialized successfully!');
-
 	} catch (error) {
 		console.error('Error activating Scratch Space extension:', error);
 		vscode.window.showErrorMessage(`Failed to activate Scratch Space: ${error}`);
@@ -308,5 +304,5 @@ export function activate(context: vscode.ExtensionContext) {
 
 // This method is called when your extension is deactivated
 export function deactivate() {
-	console.log('Scratch Space extension is now deactivated!');
+	// Clean up resources if needed
 }

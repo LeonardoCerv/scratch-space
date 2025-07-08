@@ -25,7 +25,7 @@ export class TemplateManager {
       description: 'Basic JavaScript function template',
       content: `// Basic JavaScript function
 function myFunction() {
-  console.log('Hello World!');
+  // Your code here
 }
 
 myFunction();`,
@@ -42,9 +42,9 @@ async function fetchData() {
   try {
     const response = await fetch('https://api.example.com/data');
     const data = await response.json();
-    console.log(data);
+    return data;
   } catch (error) {
-    console.error('Error fetching data:', error);
+    throw new Error('Error fetching data: ' + error);
   }
 }
 
@@ -73,7 +73,8 @@ class MyClass {
 }
 
 const instance = MyClass.create('World');
-console.log(instance.greet());`,
+const greeting = instance.greet();
+// Use the greeting value`,
       category: 'OOP'
     });
 

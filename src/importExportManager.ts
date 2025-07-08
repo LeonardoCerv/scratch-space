@@ -217,11 +217,11 @@ export class ImportExportManager {
     const firstLine = content.split('\n')[0].trim();
     
     if (firstLine.startsWith('#!')) {
-      if (firstLine.includes('python')) return 'python';
-      if (firstLine.includes('node')) return 'javascript';
-      if (firstLine.includes('bash') || firstLine.includes('sh')) return 'shellscript';
-      if (firstLine.includes('ruby')) return 'ruby';
-      if (firstLine.includes('perl')) return 'perl';
+      if (firstLine.includes('python')) {return 'python';}
+      if (firstLine.includes('node')) {return 'javascript';}
+      if (firstLine.includes('bash') || firstLine.includes('sh')) {return 'shellscript';}
+      if (firstLine.includes('ruby')) {return 'ruby';}
+      if (firstLine.includes('perl')) {return 'perl';}
     }
     
     const contentLower = content.toLowerCase();
